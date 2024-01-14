@@ -1,49 +1,54 @@
---[[
-function getList()
-    getting the list of items from the csv, located in the modfolder
-]]--
+local pathOfFile = "items\\items.csv"
 
-function getList()
-    test =1
+local function file_exists()
+    local f=io.open(pathOfFile,"r")
+    if f~=nil then
+        io.close(f)
+        return true
+    else
+        downloadCSV()
+        return false
+    end
+ end
+
+local function downloadCSV()
+    -- retrieve the content of a URL
+    io.popen("mkdir items")
+    -- curl doesnt create folder
+    if not file_exists(pathOfFile) then
+        io.popen("curl https://raw.githubusercontent.com/Pnski/Anno1800AddItemsFromList/main/data/Itemliste.csv > ".. pathOfFile)
+        system.waitForGameTimeDelta(5000) --wait 5s
+        io.popen(pathOfFile)
+    end
 end
 
---[[
-function getModFolder()
-    get the current modfolder?
-]]
-
-function getModFolder()
-    test = 1
+local function getCSVcontent()
+    itemlist = {}
+    for line in io.lines(pathOfFile) do
+        local Amount, GUID = line:match("%s*(.-),%s*(.-),%s*(.-)$")
+        if tonumber(Amount) ~= nil then
+            if tonumber(Amount) > 0 then
+                itemlist[#itemlist + 1] = { Amount = Amount, GUID = tonumber(GUID)}
+            end
+        end
+    end
+    for k, v in pairs(itemlist) do
+        print(k,v)
+    end
 end
 
---[[
-funtion getCheatItem(Item : GUID)
-]]
-
-function getCheatItem(Item)
-    test=1
+local function getCheatItem(Item, Amount)
+    for i = 1,Amount,1 do
+        print("Storing ",Item," to harbour")
+        ts.Area.Current.Economy.SetCheatItem(Item)
+    end
 end
-
---[[
-    getAllItems()
-    call function
-]]
 
 function getAllItems()
-        test = 1
-end
-
-function modlog(t)
-    local file = io.open("annopathfile.txt", "a")
-    io.output(file)
-    io.write(t,"\n")
-    io.close(file)
-end
-
-function testinghard()
-    str = debug.getinfo(2, "S").source:sub(2)
-
-    modlog(str)
+    getCSVcontent()
+    for i in pairs(itemlist) do
+        getCheatItem(itemlist[i].GUID,itemlist[i].Amount)
+    end
 end
 
 print("items loaded!")
