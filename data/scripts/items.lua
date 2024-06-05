@@ -59,9 +59,13 @@ local function getCheatItem(Item, Amount)
 end
 
 function getAllItems()
-    file_exists()
-    for i,v in pairs(getCSVcontent()) do
-        getCheatItem(v.GUID,v.Amount)
+    if file_exists() then
+        for i,v in pairs(getCSVcontent()) do
+            getCheatItem(v.GUID,v.Amount)
+        end
+    else
+        print("generated csv, waiting for edit.")
+        return
     end
 end
 
