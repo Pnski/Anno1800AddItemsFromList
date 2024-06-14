@@ -1,20 +1,23 @@
 local pathOfFile = "C:\\Users\\Public\\mod.io\\items.csv"
 local mGUID = {}
-mGUID.min=1
-mGUID.mmin=1337471142
-mGUID.mmax=2147483647
-mGUID.split=1000000
-mGUID.sMin=mGUID.min
-mGUID.sMax=1000000 --all vanilla stuff
+--mGUID.mmin=1337471142
+--mGUID.mmax=2147483647
+--volantia legendary seeds in vanilla 316861 - 316877
+mGUID.vanilla={1001,1000000}
+mGUID.Hier0nimus={1742000002,1742000444}
+mGUID.Lion={2100119190,2100119162}
+mGUID.Yodel={2024060501,2024060523}
 
 --local tasks = {  } -- queue
 
 local function crawler()
     local _itemlist = {}
-    for k = mGUID.sMin,mGUID.sMax do
-        if #ts.ToolOneHelper.GetItemRarity(k) > 0 then
-            --GUID,Name,Metatext,Allocation
-            table.insert(_itemlist, {k,ts.GetItemAssetData(k).Text,ts.ToolOneHelper.GetItemAllocation(k),ts.ToolOneHelper.GetItemRarity(k)})
+    for _,m in pairs(mGUID) do
+        for k = m[1]-1000,m[2]+1000 do
+            if #ts.ToolOneHelper.GetItemRarity(k) > 0 then
+                --GUID,Name,Metatext,Allocation
+                table.insert(_itemlist, {k,ts.GetItemAssetData(k).Text,ts.ToolOneHelper.GetItemAllocation(k),ts.ToolOneHelper.GetItemRarity(k)})
+            end
         end
     end
     return _itemlist
