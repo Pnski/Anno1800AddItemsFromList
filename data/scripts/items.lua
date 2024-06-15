@@ -5,6 +5,7 @@ local mGUID = {}
 --volantia legendary seeds in vanilla 316861 - 316877
 mGUID.vanilla={1001,1000000}
 mGUID.Hier0nimus={1742000002,1742000444}
+mGUID.Hier0nimus2={1742100167,1742100529}
 mGUID.Lion={2100119190,2100119162}
 mGUID.Yodel={2024060501,2024060523}
 
